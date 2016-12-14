@@ -1,33 +1,19 @@
-import com.google.common.collect.Lists;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.parquet.encoding.Generator;
 import org.apache.parquet.example.data.Group;
 import org.apache.parquet.hadoop.ParquetFileReader;
 import org.apache.parquet.hadoop.ParquetReader;
 import org.apache.parquet.hadoop.example.GroupReadSupport;
 import org.apache.parquet.hadoop.metadata.ParquetMetadata;
 import org.apache.parquet.schema.MessageType;
-import org.xerial.snappy.SnappyFramedInputStream;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Spliterator;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * Created by bshai on 12/14/16.
@@ -71,7 +57,7 @@ public class ParquetStreamer {
         }).spliterator(), false)
                 .map(group -> new Record(group.getInteger(0, 0), group.getInteger(1, 0), group.toString().contains("rank") ? group.getInteger(2, 0) : null));
 
-        final Map<VisibilityDistributionZone, int[]> zones = Tramsformer.getZones(recordStream);
+        final Map<VisibilityDistributionZone, int[]> zones = Transformer.getZones(recordStream);
         zones.entrySet().forEach(entry -> System.out.println(entry.getKey() + ":" + ArrayUtils.toString(entry.getValue())));
         long endTime = System.nanoTime();
 

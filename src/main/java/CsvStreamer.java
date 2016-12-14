@@ -1,20 +1,15 @@
 import com.google.common.collect.Lists;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ArrayUtils;
-import org.xerial.snappy.Snappy;
 import org.xerial.snappy.SnappyFramedInputStream;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -43,7 +38,7 @@ public class CsvStreamer {
                     return new Record(ints.get(0), ints.get(1), ints.get(2));
                 });
 
-        final Map<VisibilityDistributionZone, int[]> zones = Tramsformer.getZones(recordStream);
+        final Map<VisibilityDistributionZone, int[]> zones = Transformer.getZones(recordStream);
         zones.entrySet().forEach(entry -> System.out.println(entry.getKey() + ":" + ArrayUtils.toString(entry.getValue())));
         long endTime = System.nanoTime();
 

@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 /**
  * Created by bshai on 12/14/16.
  */
-public class Tramsformer {
+public class Transformer {
 
     public static Map<VisibilityDistributionZone, int[]> getZones(Stream<Record> stream) {
         Map<VisibilityDistributionZone, int[]> map = Maps.newEnumMap(VisibilityDistributionZone.class);
