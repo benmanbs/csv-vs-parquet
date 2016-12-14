@@ -20,8 +20,9 @@ import java.util.stream.StreamSupport;
  */
 public class ParquetStreamer {
 
-    public static void main(String[] args) throws Exception {
-        long startTime = System.nanoTime();
+    public ParquetStreamer() {}
+
+    public Map<VisibilityDistributionZone, int[]> go() throws IOException {
         final String dir = "/Users/bshai/Documents/conductor_data/search-channel-derivative-reports/visibility_distribution/v1/time_period_id=384/account_id=6128/web_property_id=18717/rank_source_id=16/rank_type=TRUE_RANK/device_id=1/locale_id=14/";
         File parquetFile = new File(dir + "visibilityDistribution.parquet");
 
@@ -57,7 +58,12 @@ public class ParquetStreamer {
         }).spliterator(), false)
                 .map(group -> new Record(group.getInteger(0, 0), group.getInteger(1, 0), group.toString().contains("rank") ? group.getInteger(2, 0) : null));
 
-        final Map<VisibilityDistributionZone, int[]> zones = Transformer.getZones(recordStream);
+        return Transformer.getZones(recordStream);
+    }
+    public static void main(String[] args) throws Exception {
+        long startTime = System.nanoTime();
+        ParquetStreamer streamer = new ParquetStreamer();
+        final Map<VisibilityDistributionZone, int[]> zones = streamer.go();
         zones.entrySet().forEach(entry -> System.out.println(entry.getKey() + ":" + ArrayUtils.toString(entry.getValue())));
         long endTime = System.nanoTime();
 

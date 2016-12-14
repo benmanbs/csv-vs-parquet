@@ -6,6 +6,8 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
@@ -19,8 +21,9 @@ import static java.util.stream.Collectors.toList;
  */
 public class CsvStreamer {
 
-    public static void main(String[] args) throws Exception {
-        long startTime = System.nanoTime();
+    public CsvStreamer() {}
+
+    public Map<VisibilityDistributionZone, int[]> go() throws IOException {
         final String dir = "/Users/bshai/Documents/conductor_data/search-channel-derivative-reports/visibility_distribution/v1/time_period_id=384/account_id=6128/web_property_id=18717/rank_source_id=16/rank_type=TRUE_RANK/device_id=1/locale_id=14/";
         InputStream is = new FileInputStream(new File(dir + "visibilityDistribution.csv.sz"));
 
@@ -38,7 +41,13 @@ public class CsvStreamer {
                     return new Record(ints.get(0), ints.get(1), ints.get(2));
                 });
 
-        final Map<VisibilityDistributionZone, int[]> zones = Transformer.getZones(recordStream);
+        return  Transformer.getZones(recordStream);
+    }
+
+    public static void main(String[] args) throws Exception {
+        long startTime = System.nanoTime();
+        CsvStreamer streamer = new CsvStreamer();
+        final Map<VisibilityDistributionZone, int[]> zones = streamer.go();
         zones.entrySet().forEach(entry -> System.out.println(entry.getKey() + ":" + ArrayUtils.toString(entry.getValue())));
         long endTime = System.nanoTime();
 
